@@ -1,0 +1,66 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Account {
+  balance   Float?
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  updatedAt DateTime @updatedAt
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+}
+
+model Transaction {
+  amount         Float?
+  createdAt      DateTime  @default(now())
+  description    String?
+  id             String    @id @default(cuid())
+  status         String?
+  txnAmount      Float?
+  txnCreatedAt   DateTime?
+  txnDescription String?
+  txnStatus      String?
+  txnType        String?
+  typeField      String?
+  updatedAt      DateTime  @updatedAt
+}
+
+model Blacklist {
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  reason    String?
+  updatedAt DateTime @updatedAt
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+}
+
+model User {
+  accounts         Account[]
+  blacklists       Blacklist[]
+  createdAt        DateTime    @default(now())
+  email            String?     @unique
+  emailNew         String?
+  firstName        String?
+  firstNameNew     String?
+  id               String      @id @default(cuid())
+  lastName         String?
+  lastNameNew      String?
+  password         String
+  passwordNew      String?
+  roles            Json
+  updatedAt        DateTime    @updatedAt
+  userEmail        String?
+  userEmailAddress String?
+  userFirstName    String?
+  userLastName     String?
+  username         String      @unique
+  userName         String?
+  usernameNew      String?
+  userPassword     String?
+}
